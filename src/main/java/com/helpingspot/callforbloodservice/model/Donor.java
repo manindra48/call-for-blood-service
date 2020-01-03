@@ -11,6 +11,10 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
+
 @Entity
 public class Donor {
 	
@@ -18,34 +22,92 @@ public class Donor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotNull(message = "is required")
 	@Size(min =  2, message="Name should have atleast 2 characters")
-	private String name;
+	private String userName;
+	
+	@NotNull(message = "is required")
+	@Size(min =  2, message="Name should have atleast 2 characters")
+	private String firstName;
+	
+	@NotNull(message = "is required")
+	@Size(min =  2, message="Name should have atleast 2 characters")
+	private String lastName;
 	
 	@Past
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date birthDate;
 	
+	@NotNull(message = "is required")
 	@Size(min =  10, message="Phone Number should have atleast 10 numbers")
 	private String phoneNumber;
 	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String password;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String matchingPassword;
+	
+	@Email
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String email;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String bloodGroup;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String country;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String state;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String district;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String city;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private Boolean availability;
 	
 	public Donor() {
 		
 	}
-	
-	public Donor(String name, Integer id, Date birthDate, String phoneNumber, String bloodGroup, String country,
-			String state, String district, String city, Boolean availability) {
+
+	public Donor(Integer id,
+			@NotNull(message = "is required") @Size(min = 2, message = "Name should have atleast 2 characters") String userName,
+			@NotNull(message = "is required") @Size(min = 2, message = "Name should have atleast 2 characters") String firstName,
+			@NotNull(message = "is required") @Size(min = 2, message = "Name should have atleast 2 characters") String lastName,
+			@Past Date birthDate,
+			@NotNull(message = "is required") @Size(min = 10, message = "Phone Number should have atleast 10 numbers") String phoneNumber,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String password,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String matchingPassword,
+			@Email @NotNull(message = "is required") @Size(min = 1, message = "is required") String email,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String bloodGroup,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String country,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String state,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String district,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") String city,
+			@NotNull(message = "is required") @Size(min = 1, message = "is required") Boolean availability) {
 		super();
-		this.name = name;
 		this.id = id;
+		this.userName = userName;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.matchingPassword = matchingPassword;
+		this.email = email;
 		this.bloodGroup = bloodGroup;
 		this.country = country;
 		this.state = state;
@@ -53,72 +115,134 @@ public class Donor {
 		this.city = city;
 		this.availability = availability;
 	}
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	public Date getBirthDate() {
 		return birthDate;
 	}
+
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getMatchingPassword() {
+		return matchingPassword;
+	}
+
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getBloodGroup() {
 		return bloodGroup;
 	}
+
 	public void setBloodGroup(String bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
+
 	public String getCountry() {
 		return country;
 	}
+
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
 	public String getState() {
 		return state;
 	}
+
 	public void setState(String state) {
 		this.state = state;
 	}
+
 	public String getDistrict() {
 		return district;
 	}
+
 	public void setDistrict(String district) {
 		this.district = district;
 	}
+
 	public String getCity() {
 		return city;
 	}
+
 	public void setCity(String city) {
 		this.city = city;
 	}
+
 	public Boolean getAvailability() {
 		return availability;
 	}
+
 	public void setAvailability(Boolean availability) {
 		this.availability = availability;
 	}
+
 	@Override
 	public String toString() {
-		return "Donor [name=" + name + ", id=" + id + ", birthDate=" + birthDate + ", phoneNumber=" + phoneNumber
-				+ ", bloodGroup=" + bloodGroup + ", country=" + country + ", state=" + state + ", district=" + district
-				+ ", city=" + city + ", availability=" + availability + "]";
+		return "Donor [id=" + id + ", userName=" + userName + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", birthDate=" + birthDate + ", phoneNumber=" + phoneNumber + ", password=" + password
+				+ ", matchingPassword=" + matchingPassword + ", email=" + email + ", bloodGroup=" + bloodGroup
+				+ ", country=" + country + ", state=" + state + ", district=" + district + ", city=" + city
+				+ ", availability=" + availability + "]";
 	}
 
 }

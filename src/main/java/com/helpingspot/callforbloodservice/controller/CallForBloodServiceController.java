@@ -11,11 +11,11 @@ public class CallForBloodServiceController {
 	public String helloWorld() {
 		return "Hello World";
 	}
-	
+
 	@GetMapping("/hello")
 	public String getHello(Model model) {
-		
-		model.addAttribute("theDate :"+new java.util.Date());
+
+		model.addAttribute("theDate :" + new java.util.Date());
 		return "helloworld";
 	}
 
