@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,22 +15,41 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.helpingspot.callforbloodservice.model.Donor;
 import com.helpingspot.callforbloodservice.model.DonorRequest;
 import com.helpingspot.callforbloodservice.model.DonorResponse;
 import com.helpingspot.callforbloodservice.service.DonorService;
 
-@RestController
+@Controller
 public class DonorJPAController {
 
 	@Autowired
 	DonorService donorService;
-	
-    private Logger logger = Logger.getLogger(getClass().getName());
 
-	
+	private Logger logger = Logger.getLogger(getClass().getName());
+
+	@GetMapping("/home")
+	public String home() {
+		return "home";
+	}
+
+	@GetMapping("/showMyLoginPage")
+	public String showMyLoginPage() {
+
+		return "fancy-login";
+
+	}
+
+	// add request mapping for /access-denied
+
+	@GetMapping("/access-denied")
+	public String showAccessDenied() {
+
+		return "access-denied";
+
+	}
+
 	@GetMapping(path = "/donors")
 	public List<Donor> retrieveAllDonors() {
 		return donorService.retrieveAllDonors();
@@ -49,49 +69,55 @@ public class DonorJPAController {
 		}
 		return donor.getId();
 	}
-	
+
 	@DeleteMapping(path = "/delete")
-	public int deleteDonorsBy(@RequestParam("id")int id) {
+	public int deleteDonorsBy(@RequestParam("id") int id) {
 		donorService.deleteDonorsBy(id);
 		return id;
 	}
-	
+
 	@DeleteMapping(path = "/delete-by-donor")
 	public int deleteDonorsByEntity(@RequestBody Donor donor) {
 		donorService.deleteDonorsByEntity(donor);
 		return donor.getId();
 	}
-	
+
+	@GetMapping("/showRegistrationForm")
+	public String showMyLoginPage(Model theModel) {
+
+		theModel.addAttribute("crmUser", new Donor());
+
+		return "registration-form";
+	}
+
 	@PostMapping("/processRegistrationForm")
-	public String processRegistrationForm(
-				@Valid @ModelAttribute("crmUser") Donor donor, 
-				BindingResult theBindingResult, 
-				Model theModel) {
-		
+	public String processRegistrationForm(@Valid @ModelAttribute("crmUser") Donor donor, BindingResult theBindingResult,
+			Model theModel) {
+
 		String userName = donor.getUserName();
 		logger.info("Processing registration form for: " + userName);
-		
+
 		// form validation
-		 if (theBindingResult.hasErrors()){
-			 return "registration-form";
-	        }
+		if (theBindingResult.hasErrors()) {
+			return "registration-form";
+		}
 
 		// check the database if user already exists
-        Donor existing = donorService.findByUserName(userName);
-        if (existing != null){
-        	theModel.addAttribute("crmUser", new Donor());
+		Donor existing = donorService.findByUserName(userName);
+		if (existing != null) {
+			theModel.addAttribute("crmUser", new Donor());
 			theModel.addAttribute("registrationError", "User name already exists.");
 
 			logger.warning("User name already exists.");
-        	return "registration-form";
-        }
-        
-        // create user account        						
-        donorService.save(donor);
-        
-        logger.info("Successfully created user: " + userName);
-        
-        return "registration-confirmation";		
+			return "registration-form";
+		}
+
+		// create user account
+		donorService.save(donor);
+
+		logger.info("Successfully created user: " + userName);
+
+		return "registration-confirmation";
 	}
-	
+
 }
