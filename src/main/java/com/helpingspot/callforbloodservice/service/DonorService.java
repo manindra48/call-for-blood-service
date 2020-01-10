@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,8 @@ import com.helpingspot.callforbloodservice.model.Role;
 @Component
 public class DonorService implements UserDetailsService {
 
+	private final org.slf4j.Logger log = LoggerFactory.getLogger(DonorService.class);
+
 	@Autowired
 	DonorRepository donorRepository;
 
@@ -45,25 +48,27 @@ public class DonorService implements UserDetailsService {
 	public List<Donor> retrieveAllDonors() {
 		return donorRepository.findAll();
 	}
-	
+
 	public Optional<Donor> retrieveDonorById(int id) {
 		return donorRepository.findById(id);
 	}
 
 	public List<DonorResponse> retrieveAllDonorsByDetails(DonorRequest donorRequest) {
+		log.info("Retrieve all donors matching {}", donorRequest);
 		return donorRepository.findUserByStatusAndName(donorRequest.getBloodGroup(), donorRequest.getCountry(),
 				donorRequest.getState(), donorRequest.getDistrict(), donorRequest.getCity());
 	}
 
 	@Transactional
-	public Donor findByUserName(String userName) {
+	public Donor findByUserName(String donorName) {
+		log.info("Retrieve donor details having donor name {}", donorName);
 		// return donorRepository.findByUserName(userName);
 		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
 
 		// now retrieve/read from database using username
 		Query<Donor> theQuery = currentSession.createQuery("from Donor where userName=:uName", Donor.class);
-		theQuery.setParameter("uName", userName);
+		theQuery.setParameter("uName", donorName);
 		Donor theUser = null;
 		try {
 			theUser = theQuery.getSingleResult();
@@ -76,7 +81,7 @@ public class DonorService implements UserDetailsService {
 
 	public Integer save(Donor donor) {
 		try {
-
+			log.info("Entering to store donor having details : {}", donor);
 			Donor updateDonor = new Donor();
 			// assign user details to the user object
 			updateDonor.setId(donor.getId());
@@ -91,22 +96,14 @@ public class DonorService implements UserDetailsService {
 			updateDonor.setState(donor.getState());
 			updateDonor.setDistrict((donor.getDistrict()));
 			updateDonor.setCity(donor.getCity());
-			// updateDonor.setAvailability((donor.getAvailability()));
 			updateDonor.setPhoneNumber(donor.getPhoneNumber());
-//			updateDonor.setEmail("smaple@gmail.com");
-//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//			updateDonor.setBirthDate(formatter.parse("2019-12-19 10:45:11"));
-//			updateDonor.setBloodGroup("A");
-//			updateDonor.setCountry("India");
-//			updateDonor.setState("Hyd");
-//			updateDonor.setDistrict("Hyd");
-//			updateDonor.setCity("hyd");
 			updateDonor.setAvailability(true);
 			updateDonor.setPhoneNumber(donor.getPhoneNumber());
-			updateDonor.setRoles(Arrays.asList(roleRepository.findRoleByName("EMPLOYEE")));
-
+			updateDonor.setRoles(Arrays.asList(roleRepository.findRoleByName("ROLE_EMPLOYEE")));
 			donorRepository.save(updateDonor);
+			log.info("Successfully saved donor details : {}", updateDonor);
 		} catch (Exception e) {
+			log.error("DonorService.save: Failed to save given donor details {} with exception {}", donor, e);
 			return 0;
 		}
 		return donor.getId();
@@ -124,18 +121,20 @@ public class DonorService implements UserDetailsService {
 
 	@Override
 	@Transactional
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Donor user = donorRepository.findByUserName(userName);
-		if (user == null) {
+	public UserDetails loadUserByUsername(String donorName) throws UsernameNotFoundException {
+		log.info("loadUserByUsername: Entering to get donor by donor name : {}", donorName);
+		Donor donor = donorRepository.findByUserName(donorName);
+		if (donor == null) {
+			log.error("No donor found for the given name : {}", donorName);
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+		log.info("loadUserByUsername: Returning donor details : {}", donor);
+		return new org.springframework.security.core.userdetails.User(donor.getUserName(), donor.getPassword(),
+				mapRolesToAuthorities(donor.getRoles()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
-
 
 }

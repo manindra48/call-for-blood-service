@@ -16,11 +16,7 @@ public interface DonorRepository extends JpaRepository<Donor, Integer> {
 	List<DonorResponse> findUserByStatusAndName(String bloodGroup, String country, String state, String district,
 			String city);
 
-	// @Query("SELECT new
-	// com.helpingspot.callforbloodservice.model.Donor(d.id,d.userName,d.firstName,d.lastName,d.birthDate,
-	// d.phoneNumber,d.password,d.email,
-	// d.bloodGroup,d.country,d.state,d.district,d.city,d.availability) FROM Donor d
-	// WHERE d.userName = ?1")
+	//@Query("SELECT new com.helpingspot.callforbloodservice.model.Donor(d.id,d.userName,d.firstName,d.lastName,d.birthDate,d.phoneNumber,d.password,d.email,d.bloodGroup,d.country,d.state,d.district,d.city,d.availability) FROM Donor d WHERE d.userName = ?1")
 	Donor findByUserName(String userName);
 
 }

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Save Employee</title>
+</head>
+
+<body>
+
+	<div class="container">
+	
+		<h3>Donor Directory</h3>
+		<hr>
+		
+		<p class="h4 mb-4">Save Donor</p>
+	
+		<form th:action="@{/donors/save}"
+			  th:object="${donor}" method="POST">
+		
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" th:field="${donor.id}" />
+			
+							<input type="text" th:field="${donor.userName}"
+					class="form-control mb-4 col-4" placeholder="User Name">
+			
+			<input type="text" th:field="${donor.firstName}"
+					class="form-control mb-4 col-4" placeholder="First name">
+
+			<input type="text" th:field="${donor.lastName}"
+					class="form-control mb-4 col-4" placeholder="Last name">
+
+			<input type="text" th:field="${donor.email}"
+					class="form-control mb-4 col-4" placeholder="Email">
+					
+			<input type="text" th:field="${donor.phoneNumber}"
+					class="form-control mb-4 col-4" placeholder="Phone Number">
+					
+								<input type="text" th:field="${donor.birthDate}"
+					class="form-control mb-4 col-4" placeholder="Birth Date">
+					
+								<input type="text" th:field="${donor.bloodGroup}"
+					class="form-control mb-4 col-4" placeholder="Blood Group">
+					
+								<input type="text" th:field="${donor.country}"
+					class="form-control mb-4 col-4" placeholder="Country">
+					
+							<input type="text" th:field="${donor.state}"
+					class="form-control mb-4 col-4" placeholder="State">
+					
+							<input type="text" th:field="${donor.district}"
+					class="form-control mb-4 col-4" placeholder="District">
+					
+							<input type="text" th:field="${donor.city}"
+					class="form-control mb-4 col-4" placeholder="City">
+					
+					<input type="text" th:field="${donor.availability}"
+					class="form-control mb-4 col-4" placeholder="Availability">
+					
+					<input type="hidden" th:field="${donor.roles}" />
+					
+					<input type="hidden" th:field="${donor.password}"  />
+				
+			<button type="submit" class="btn btn-info col-2">Save</button>
+						
+		</form>
+	
+		<hr>
+		<a th:href="@{/donors/list}">Back to Donors List</a>
+		
+	</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

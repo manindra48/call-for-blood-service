@@ -50,7 +50,7 @@ public class Donor {
 	private String phoneNumber;
 
 	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@Size(min = 10, message = "is required")
 	private String password;
 
 //	@NotNull(message = "is required")

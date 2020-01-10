@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.validation.Valid;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.helpingspot.callforbloodservice.model.Donor;
@@ -23,7 +25,14 @@ import com.helpingspot.callforbloodservice.model.DonorResponse;
 import com.helpingspot.callforbloodservice.service.DonorService;
 
 @Controller
+@RequestMapping("/donors")
 public class DonorJPAController {
+	
+	private final org.slf4j.Logger log =  LoggerFactory.getLogger(DonorJPAController.class);
+	
+	
+	private final static String SHOW_REGISTRATION_FORM = "registration-form";
+	private final static String DONOR_FORM = "donor-form";
 
 	@Autowired
 	DonorService donorService;
@@ -37,18 +46,14 @@ public class DonorJPAController {
 
 	@GetMapping("/showMyLoginPage")
 	public String showMyLoginPage() {
-
 		return "fancy-login";
-
 	}
 
 	// add request mapping for /access-denied
 
 	@GetMapping("/access-denied")
 	public String showAccessDenied() {
-
 		return "access-denied";
-
 	}
 
 	@GetMapping(path = "/donors")
@@ -88,7 +93,7 @@ public class DonorJPAController {
 
 		theModel.addAttribute("crmUser", new Donor());
 
-		return "registration-form";
+		return SHOW_REGISTRATION_FORM;
 	}
 
 	@PostMapping("/processRegistrationForm")
@@ -96,11 +101,11 @@ public class DonorJPAController {
 			Model theModel) {
 
 		String userName = donor.getUserName();
-		logger.info("Processing registration form for: " + userName);
+		logger.info("Processing registration form for: {}" + userName);
 
 		// form validation
 		if (theBindingResult.hasErrors()) {
-			return "registration-form";
+			return SHOW_REGISTRATION_FORM;
 		}
 
 		// check the database if user already exists
@@ -110,7 +115,7 @@ public class DonorJPAController {
 			theModel.addAttribute("registrationError", "User name already exists.");
 
 			logger.warning("User name already exists.");
-			return "registration-form";
+			return SHOW_REGISTRATION_FORM;
 		}
 
 		// create user account
@@ -132,48 +137,47 @@ public class DonorJPAController {
 
 	@GetMapping("/list")
 	public String listDonors(Model theModel) {
-		
 		// get donors from db
 		List<Donor> donors = donorService.retrieveAllDonors();
 		
 		// add to the spring model
 		theModel.addAttribute("donors", donors);
 		
-		return "/donors/list-donors";
+		return "list-donors";
 	}
 	
 	@GetMapping("/showFormForAdd")
 	public String showFormForAdd(Model theModel) {
-		
 		// create model attribute to bind form data
 		Donor donor = new Donor();
-		
 		theModel.addAttribute("donor", donor);
-		
-		return "/donor/donor-form";
+		return DONOR_FORM;
 	}
 
 	@GetMapping("/showFormForUpdate")
 	public String showFormForUpdate(@RequestParam("donorId") int id,
 									Model theModel) {
-		
 		// get the donor from the service
 		Optional<Donor> donor = donorService.retrieveDonorById(id);
+		
+		log.info("showFormForUpdate : Existing donor detials for update : {}", donor);
 		
 		// set donor as a model attribute to pre-populate the form
 		if(donor.isPresent()) {
 			theModel.addAttribute("donor", donor);
 		}
 		// send over to our form
-		return "/donor/donor-form";			
+		return DONOR_FORM;			
 	}
 	
 	
 	@PostMapping("/save")
-	public String saveDonors(@ModelAttribute("donor") Donor donor) {
-		
+	public String saveDonors(@Valid @ModelAttribute("donor") Donor donor) {
+		log.info("Entering to save donor details : {}", donor);
 		// save the donor
 		donorService.save(donor);
+		
+		log.info("Exiting save donor details : {}", donor);
 		
 		// use a redirect to prevent duplicate submissions
 		return "redirect:/donors/list";
@@ -182,13 +186,10 @@ public class DonorJPAController {
 	
 	@GetMapping("/delete")
 	public String delete(@RequestParam("donorId") int id) {
-		
 		// delete the donor
 		donorService.deleteDonorsBy(id);
-		
 		// redirect to /donors/list
 		return "redirect:/donors/list";
-		
 	}
 	
 
