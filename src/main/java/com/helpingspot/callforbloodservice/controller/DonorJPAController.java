@@ -1,6 +1,7 @@
 package com.helpingspot.callforbloodservice.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.validation.Valid;
@@ -119,5 +120,77 @@ public class DonorJPAController {
 
 		return "registration-confirmation";
 	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////
+//////////////////////////CRUD OPERATIONS////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	// add mapping for "/list"
+
+	@GetMapping("/list")
+	public String listDonors(Model theModel) {
+		
+		// get donors from db
+		List<Donor> donors = donorService.retrieveAllDonors();
+		
+		// add to the spring model
+		theModel.addAttribute("donors", donors);
+		
+		return "/donors/list-donors";
+	}
+	
+	@GetMapping("/showFormForAdd")
+	public String showFormForAdd(Model theModel) {
+		
+		// create model attribute to bind form data
+		Donor donor = new Donor();
+		
+		theModel.addAttribute("donor", donor);
+		
+		return "/donor/donor-form";
+	}
+
+	@GetMapping("/showFormForUpdate")
+	public String showFormForUpdate(@RequestParam("donorId") int id,
+									Model theModel) {
+		
+		// get the donor from the service
+		Optional<Donor> donor = donorService.retrieveDonorById(id);
+		
+		// set donor as a model attribute to pre-populate the form
+		if(donor.isPresent()) {
+			theModel.addAttribute("donor", donor);
+		}
+		// send over to our form
+		return "/donor/donor-form";			
+	}
+	
+	
+	@PostMapping("/save")
+	public String saveDonors(@ModelAttribute("donor") Donor donor) {
+		
+		// save the donor
+		donorService.save(donor);
+		
+		// use a redirect to prevent duplicate submissions
+		return "redirect:/donors/list";
+	}
+	
+	
+	@GetMapping("/delete")
+	public String delete(@RequestParam("donorId") int id) {
+		
+		// delete the donor
+		donorService.deleteDonorsBy(id);
+		
+		// redirect to /donors/list
+		return "redirect:/donors/list";
+		
+	}
+	
+
 
 }

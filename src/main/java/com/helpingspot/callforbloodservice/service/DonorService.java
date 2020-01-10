@@ -3,6 +3,7 @@ package com.helpingspot.callforbloodservice.service;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -43,6 +44,10 @@ public class DonorService implements UserDetailsService {
 
 	public List<Donor> retrieveAllDonors() {
 		return donorRepository.findAll();
+	}
+	
+	public Optional<Donor> retrieveDonorById(int id) {
+		return donorRepository.findById(id);
 	}
 
 	public List<DonorResponse> retrieveAllDonorsByDetails(DonorRequest donorRequest) {
@@ -131,5 +136,6 @@ public class DonorService implements UserDetailsService {
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
+
 
 }
