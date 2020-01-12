@@ -29,13 +29,13 @@
 		<div id="loginbox" style="margin-top: 50px;"
 			class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
 			
-			<div class="panel panel-primary">
+			<div class="panel panel-primary" style="width:600px;">
 
 				<div class="panel-heading">
 					<div class="panel-title">Register New User</div>
 				</div>
 
-				<div style="padding-top: 30px" class="panel-body">
+				<div style="padding-top: 30px;" class="panel-body">
 
 					<!-- Registration Form -->
 					<form th:action="@{/donors/processRegistrationForm}" 
@@ -55,21 +55,23 @@
 					            </div>
 					        </div>
 					    </div>
-
+                       <table style="border-spacing:1px">
+                       <tr><th ></th><th></th></tr>
+                        <tr><td >
 						<!-- User name -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
 							<input type="text" th:field="*{userName}" placeholder="username (*)" class="form-control" />
 						</div>
-
+						
 						<div th:if="${#fields.hasErrors('userName')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
 							  <li th:each="err : ${#fields.errors('userName')}" th:text="'Username ' + ${err}" />
 							</ul>						
 						</div>
-						
-
+						</td>
+						<td style>
 						<!-- Password -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
@@ -81,7 +83,8 @@
 							  <li th:each="err : ${#fields.errors('password')}" th:text="'Password ' + ${err}" />
 							</ul>						
 						</div>
-						
+						</td>
+						</tr>
 						<!-- Confirm Password -->
 <!-- 						<div style="margin-bottom: 25px" class="input-group"> -->
 <!-- 							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>  -->
@@ -94,7 +97,7 @@
 <!-- 							</ul>						 -->
 <!-- 						</div> -->
 					
-						
+						<tr><td>
 						<!-- First name -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -106,7 +109,8 @@
 							  <li th:each="err : ${#fields.errors('firstName')}" th:text="'First name ' + ${err}" />
 							</ul>						
 						</div>
-						
+						</td>
+						<td >
 						<!-- Last name -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -118,7 +122,10 @@
 							  <li th:each="err : ${#fields.errors('lastName')}" th:text="'Last name ' + ${err}" />
 							</ul>						
 						</div>
+						</td>
+						</tr>
 						
+						<tr><td>
 						<!-- Email -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -130,8 +137,8 @@
 							  <li th:each="err : ${#fields.errors('email')}" th:text="'Email ' + ${err}" />
 							</ul>						
 						</div>
-						
-						
+						</td>
+						<td>
 							<!-- Phone Number -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -144,6 +151,10 @@
 							</ul>						
 						</div>
 						
+						</td>
+						</tr>
+						
+						<tr><td>
 							<!-- Blood group -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -152,10 +163,12 @@
 						<div th:if="${#fields.hasErrors('bloodGroup')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('bloodGroup'')}" th:text="'Blood Group ' + ${err}" />
+							  <li th:each="err : ${#fields.errors('bloodGroup')}" th:text="'Blood Group ' + ${err}" />
 							</ul>						
 						</div>
 						
+						</td>
+						<td>
 							<!-- Country -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -164,10 +177,14 @@
 						<div th:if="${#fields.hasErrors('country')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('country'')}" th:text="'Country' + ${err}" />
+							  <li th:each="err : ${#fields.errors('country')}" th:text="'Country' + ${err}" />
 							</ul>						
 						</div>
 						
+						</td>
+						</tr>
+						
+						<tr><td>
 							<!-- State -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -176,10 +193,13 @@
 						<div th:if="${#fields.hasErrors('state')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('state'')}" th:text="'State' + ${err}" />
+							  <li th:each="err : ${#fields.errors('state')}" th:text="'State' + ${err}" />
 							</ul>						
 						</div>
 						
+						
+						</td>
+						<td>
 							<!-- City -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -188,9 +208,15 @@
 						<div th:if="${#fields.hasErrors('city')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('city'')}" th:text="'City' + ${err}" />
+							  <li th:each="err : ${#fields.errors('city')}" th:text="'City' + ${err}" />
 							</ul>						
 						</div>
+						
+						</td>
+						</tr>
+						
+						
+						<tr><td>
 						
 							<!-- District -->
 						<div style="margin-bottom: 25px" class="input-group">
@@ -200,10 +226,12 @@
 						<div th:if="${#fields.hasErrors('district')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('district'')}" th:text="'District' + ${err}" />
+							  <li th:each="err : ${#fields.errors('district')}" th:text="'District' + ${err}" />
 							</ul>						
 						</div>
 						
+						</td>
+						<td>
 						
 							<!-- Availability -->
 						<div style="margin-bottom: 25px" class="input-group">
@@ -213,9 +241,15 @@
 						<div th:if="${#fields.hasErrors('availability')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('availability'')}" th:text="'Availability' + ${err}" />
+							  <li th:each="err : ${#fields.errors('availability')}" th:text="'Availability' + ${err}" />
 							</ul>						
 						</div>
+						
+						</td>
+						</tr>
+						
+						
+						<tr><td>
 						
 							<!-- Birth Date -->
 						<div style="margin-bottom: 25px" class="input-group">
@@ -225,18 +259,23 @@
 						<div th:if="${#fields.hasErrors('birthDate')}"
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
-							  <li th:each="err : ${#fields.errors('birthDate'')}" th:text="'${#dates.format(Birth Date, 'yyyy-MM-dd')}' + ${err}" />
+							  <li th:each="err : ${#fields.errors('birthDate')}" th:text="'${#dates.format(Birth Date, 'yyyy-MM-dd')}' + ${err}" />
 							</ul>						
 						</div>
 						
+						</td>
+						<td>
+						</td>
+						</tr>
 						
+						</table>
 						<!-- Register Button -->
 						<div style="margin-top: 10px" class="form-group">						
 							<div class="col-sm-6 controls">
 								<button type="submit" class="btn btn-primary">Register</button>
 							</div>
 						</div>
-						<a th:href="@{/showMyLoginPage}">Login</a>
+						<a th:href="@{/donors/showMyLoginPage}">Login</a>
 					</form>
 
 				</div>

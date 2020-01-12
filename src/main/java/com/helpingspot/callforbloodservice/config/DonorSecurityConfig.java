@@ -1,23 +1,21 @@
 package com.helpingspot.callforbloodservice.config;
 
-import javax.sql.DataSource;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.helpingspot.callforbloodservice.service.DonorService;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
+@EnableWebMvc
 public class DonorSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final org.slf4j.Logger log = LoggerFactory.getLogger(DonorSecurityConfig.class);
@@ -39,10 +37,10 @@ public class DonorSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		log.info("Entering configure with HttpSecurity details : {}", http);
-		http.authorizeRequests().antMatchers("/").hasRole("EMPLOYEE").antMatchers("/leaders/**").hasRole("MANAGER")
-				.antMatchers("/systems/**").hasRole("ADMIN").and().formLogin().loginPage("/showMyLoginPage")
+		http.authorizeRequests().antMatchers("/").authenticated().and().formLogin().loginPage("/showMyLoginPage")
 				.loginProcessingUrl("/authenticateTheUser").successHandler(customAuthenticationSuccessHandler)
-				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/access-denied");
+				.permitAll().and().logout().logoutSuccessUrl("/donors/showMyLoginPage").permitAll().and()
+				.exceptionHandling().accessDeniedPage("/access-denied");
 		log.info("Exiting Configuration method");
 	}
 

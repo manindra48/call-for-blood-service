@@ -23,50 +23,75 @@
 	
 		<form th:action="@{/donors/save}"
 			  th:object="${donor}" method="POST">
-		
-			<!-- Add hidden form field to handle update -->
+		<table>
+			<tr><td>
 			<input type="hidden" th:field="${donor.id}" />
 			
 							<input type="text" th:field="${donor.userName}"
-					class="form-control mb-4 col-4" placeholder="User Name">
-			
+					class="form-control" placeholder="User Name" >
+			</td>
+			<td>
+				
 			<input type="text" th:field="${donor.firstName}"
-					class="form-control mb-4 col-4" placeholder="First name">
-
+					class="form-control" placeholder="First name">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<input type="text" th:field="${donor.lastName}"
+					class="form-control" placeholder="Last name">
+			</td>
+			<td>
 			<input type="text" th:field="${donor.lastName}"
-					class="form-control mb-4 col-4" placeholder="Last name">
-
-			<input type="text" th:field="${donor.email}"
-					class="form-control mb-4 col-4" placeholder="Email">
-					
-			<input type="text" th:field="${donor.phoneNumber}"
-					class="form-control mb-4 col-4" placeholder="Phone Number">
-					
-								<input type="text" th:field="${donor.birthDate}"
-					class="form-control mb-4 col-4" placeholder="Birth Date">
-					
-								<input type="text" th:field="${donor.bloodGroup}"
-					class="form-control mb-4 col-4" placeholder="Blood Group">
-					
-								<input type="text" th:field="${donor.country}"
-					class="form-control mb-4 col-4" placeholder="Country">
-					
+					class="form-control" placeholder="Last name">
+			</td>
+			</tr>
+			<tr>
+			<td><input type="text" th:field="${donor.email}"
+					class="form-control" placeholder="Email"></td>
+			<td><input type="text" th:field="${donor.phoneNumber}"
+					class="form-control" placeholder="Phone Number">
+					</td>
+			</tr>
+			<tr>
+			<td>
+							<input type="text" th:field="${donor.birthDate}"
+					class="form-control" placeholder="Birth Date">
+			</td>
+			<td>
+				<input type="text" th:field="${donor.bloodGroup}"
+					class="form-control" placeholder="Blood Group">
+			</td>
+			</tr>
+			<tr>
+			<td>
+						<input type="text" th:field="${donor.country}"
+					class="form-control" placeholder="Country">
+			</td>
+			<td>					
 							<input type="text" th:field="${donor.state}"
-					class="form-control mb-4 col-4" placeholder="State">
-					
-							<input type="text" th:field="${donor.district}"
-					class="form-control mb-4 col-4" placeholder="District">
-					
+					class="form-control" placeholder="State">
+			</td>
+			</tr>
+			<tr><td>
+						<input type="text" th:field="${donor.district}"
+					class="form-control" placeholder="District">
+			</td>
+			<td>			
 							<input type="text" th:field="${donor.city}"
-					class="form-control mb-4 col-4" placeholder="City">
+					class="form-control" placeholder="City">
+			</td></tr>
+			<tr><td><input type="text" th:field="${donor.availability}"
+					class="form-control" placeholder="Availability"></td></tr>
+		 </table>
+			<!-- Add hidden form field to handle update -->		
 					
-					<input type="text" th:field="${donor.availability}"
-					class="form-control mb-4 col-4" placeholder="Availability">
 					
 					<input type="hidden" th:field="${donor.roles}" />
 					
 					<input type="hidden" th:field="${donor.password}"  />
 				
+			<br>	
 			<button type="submit" class="btn btn-info col-2">Save</button>
 						
 		</form>

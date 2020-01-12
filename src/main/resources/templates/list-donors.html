@@ -14,47 +14,71 @@
 	<title>Donors Directory</title>
 </head>
 
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Blood Donor</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact</a>
+      </li>
+    </ul>
+    <span class="navbar-item">
+     <form th:action="@{/logout}" 
+			   method="POST">
+	
+		<input type="submit" value="Logout" class="btn" />
+	
+	</form>
+    </span>
+  </div>
+</nav>
+
 	<!-- display user name and role -->
 	
+	
+
+<body>
+
+<div class="container">
+
 	<div>
-		User: <span sec:authentication="name"></span>
-		<br><br>
-		Role(s): <span sec:authentication="principal.authorities"></span>
-		<br><br>
+		<b>User: </b><span sec:authentication="name"></span><br>
+		<b>Role(s):</b> <span sec:authentication="principal.authorities"></span>
 
 		<!-- Check for login error -->																	
 		<div th:if="${session.user}" >
 			<p th:text="'First name: ' + ${session.user.firstName} + ', Last name: ' + ${session.user.lastName} + ', Email: ' + ${session.user.email}"></p>
 		</div>		
 	</div>
-
-<body>
-
-<div class="container">
-
 	<h3>Donors Directory</h3>
-	<hr>
-	
 	<div>
 		User: <span sec:authentication="name"></span>
-		<br>
 		Role(s): <span sec:authentication="principal.authorities"></span>
-		<br><br>
 	</div>
 	
     <form th:action="@{/donors/search}" class="form-inline">
-		<a th:href="@{/donors/showFormForAdd}"
+    <div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+		<a th:href="@{/donors/add}"
 			class="btn btn-primary btn-sm mr-5 mb-3">
 			Add Employee
 		</a>
-
+	</div>
 		<input class="form-control  ml-5 mr-sm-2 mb-3" type="search" name="employeeName" placeholder="Search by name" />
 
 		<button class="btn btn-success mb-3" type="submit">Search</button>
     </form>	
 	
 	
-	<table class="table table-bordered table-striped">
+	<table class="table table-sm">
 		<thead class="thead-dark">
 			<tr>
 				<th>First Name</th>
@@ -70,16 +94,15 @@
 				<td th:text="${donor.lastName}" />	
 				
 				<td>
-					<div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+					<div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')" style="padding-right:3px;float:left;">
 
 						<!-- Add "update" button/link -->
-						<a th:href="@{/donors/showFormForUpdate(donorId=${donor.id})}"
+						<a th:href="@{/donors/(donorId=${donor.id})}"
 						   class="btn btn-info btn-sm">
 							Update
 						</a>
 
 					</div>					
-				
 					<div sec:authorize="hasRole('ROLE_ADMIN')">  
 					
 						<!-- Add "delete" button/link -->					
@@ -98,12 +121,7 @@
 	</table>
 	
 	<!-- Add a logout button -->
-	<form action="#" th:action="@{/logout}" 
-			   method="POST">
 	
-		<input type="submit" value="Logout" class="btn btn-outline-primary mt-2" />
-	
-	</form>
 	
 </div>
 	

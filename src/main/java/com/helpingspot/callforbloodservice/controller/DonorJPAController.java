@@ -27,10 +27,9 @@ import com.helpingspot.callforbloodservice.service.DonorService;
 @Controller
 @RequestMapping("/donors")
 public class DonorJPAController {
-	
-	private final org.slf4j.Logger log =  LoggerFactory.getLogger(DonorJPAController.class);
-	
-	
+
+	private final org.slf4j.Logger log = LoggerFactory.getLogger(DonorJPAController.class);
+
 	private final static String SHOW_REGISTRATION_FORM = "registration-form";
 	private final static String DONOR_FORM = "donor-form";
 
@@ -56,10 +55,10 @@ public class DonorJPAController {
 		return "access-denied";
 	}
 
-	@GetMapping(path = "/donors")
-	public List<Donor> retrieveAllDonors() {
-		return donorService.retrieveAllDonors();
-	}
+//	@GetMapping(path = "/donors")
+//	public List<Donor> retrieveAllDonors() {
+//		return donorService.retrieveAllDonors();
+//	}
 
 	@GetMapping(path = "/donors-by-details")
 	public List<DonorResponse> retrieveAllDonorsByDetails(@RequestBody DonorRequest donorRequest) {
@@ -125,65 +124,60 @@ public class DonorJPAController {
 
 		return "registration-confirmation";
 	}
-	
-	
+
 /////////////////////////////////////////////////////////////////////////////
 //////////////////////////CRUD OPERATIONS////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-	
-	
-	
+
 	// add mapping for "/list"
 
 	@GetMapping("/list")
 	public String listDonors(Model theModel) {
 		// get donors from db
 		List<Donor> donors = donorService.retrieveAllDonors();
-		
+
 		// add to the spring model
 		theModel.addAttribute("donors", donors);
-		
+
 		return "list-donors";
 	}
-	
-	@GetMapping("/showFormForAdd")
+
+	@GetMapping("/add")
 	public String showFormForAdd(Model theModel) {
 		// create model attribute to bind form data
 		Donor donor = new Donor();
 		theModel.addAttribute("donor", donor);
-		return DONOR_FORM;
+		// return DONOR_FORM;
+		return "donor-form";
 	}
 
-	@GetMapping("/showFormForUpdate")
-	public String showFormForUpdate(@RequestParam("donorId") int id,
-									Model theModel) {
+	@GetMapping("/update")
+	public String showFormForUpdate(@RequestParam("donorId") int id, Model theModel) {
 		// get the donor from the service
 		Optional<Donor> donor = donorService.retrieveDonorById(id);
-		
+
 		log.info("showFormForUpdate : Existing donor detials for update : {}", donor);
-		
+
 		// set donor as a model attribute to pre-populate the form
-		if(donor.isPresent()) {
+		if (donor.isPresent()) {
 			theModel.addAttribute("donor", donor);
 		}
 		// send over to our form
-		return DONOR_FORM;			
+		return DONOR_FORM;
 	}
-	
-	
+
 	@PostMapping("/save")
 	public String saveDonors(@Valid @ModelAttribute("donor") Donor donor) {
 		log.info("Entering to save donor details : {}", donor);
 		// save the donor
 		donorService.save(donor);
-		
+
 		log.info("Exiting save donor details : {}", donor);
-		
+
 		// use a redirect to prevent duplicate submissions
 		return "redirect:/donors/list";
 	}
-	
-	
+
 	@GetMapping("/delete")
 	public String delete(@RequestParam("donorId") int id) {
 		// delete the donor
@@ -191,7 +185,5 @@ public class DonorJPAController {
 		// redirect to /donors/list
 		return "redirect:/donors/list";
 	}
-	
-
 
 }
